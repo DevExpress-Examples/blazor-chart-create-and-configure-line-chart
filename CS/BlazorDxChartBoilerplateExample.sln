@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36202.13 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorDxChartBoilerplateExample", "BlazorDxChartBoilerplateExample.csproj", "{610C0CA1-9E6A-4347-B67C-E89EDF9E4135}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorDxChartBoilerplateExample", "BlazorDxChartBoilerplateExample\BlazorDxChartBoilerplateExample.csproj", "{610C0CA1-9E6A-4347-B67C-E89EDF9E4135}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
