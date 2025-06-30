@@ -1,0 +1,77 @@
+﻿@page "/"
+@using System.Data;
+@using System.Drawing;
+@rendermode InteractiveServer
+
+<DxChart T="object" CustomizeSeriesPoint="CustomizeSeriesPoint">
+    @foreach (var region in regionNames)
+    {
+        <DxChartLineSeries Data="@(dataTable?.AsEnumerable().Where(r => r["Region"].ToString() == region))"
+                           ArgumentField='(DataRow row) => (DateTime)row["Month"]'
+                           ValueField='(DataRow row) => (int)row["Amount"]'
+                           Width="2"
+                           Name="@region">
+        </DxChartLineSeries>
+    }
+
+    <DxChartLegend Position="RelativePosition.Outside" AllowToggleSeries="true" />
+
+    <DxChartTooltip Enabled="true">
+        @context.Point.Render((seriesPoint) =>
+            @<div style="margin: 0.75rem">
+                <div>@seriesPoint.SeriesName</div>
+                <span>@($"{seriesPoint.Argument: MMMM yyyy}: ")</span>
+                <span>@($"{seriesPoint.Value: $0,.0}K")</span>
+            </div>
+        )
+    </DxChartTooltip>
+</DxChart>
+
+@code {
+    DataTable? dataTable;
+    List<string> regionNames = new();
+
+    protected override void OnInitialized()
+    {
+        dataTable = GetDataTable();
+        regionNames = dataTable.AsEnumerable()
+            .Select(r => r["Region"]?.ToString() ?? string.Empty)
+            .Distinct()
+            .ToList();
+    }
+
+    protected void CustomizeSeriesPoint(ChartSeriesPointCustomizationSettings e)
+    {
+        int value = (int)((ChartSeriesPoint<object>)e.Point).Value;
+        var color = Color.Green;
+        if (value < 1200)
+            color = Color.Yellow;
+        if (value < 1000)
+            color = Color.Red;
+        e.PointAppearance.Color = color;
+    }
+
+    DataTable GetDataTable()
+    {
+        DataTable table = new DataTable();
+        table.Columns.Add("Region", typeof(string));
+        table.Columns.Add("Month", typeof(DateTime));
+        table.Columns.Add("Amount", typeof(int));
+
+        table.Rows.Add("North America", new DateTime(2024, 1, 1), 1000);
+        table.Rows.Add("North America", new DateTime(2024, 2, 1), 1200);
+        table.Rows.Add("North America", new DateTime(2024, 3, 1), 900);
+        table.Rows.Add("North America", new DateTime(2024, 4, 1), 1500);
+        table.Rows.Add("North America", new DateTime(2024, 5, 1), 1100);
+        table.Rows.Add("North America", new DateTime(2024, 6, 1), 1300);
+
+        table.Rows.Add("Europe", new DateTime(2024, 1, 1), 950);
+        table.Rows.Add("Europe", new DateTime(2024, 2, 1), 1050);
+        table.Rows.Add("Europe", new DateTime(2024, 3, 1), 980);
+        table.Rows.Add("Europe", new DateTime(2024, 4, 1), 1150);
+        table.Rows.Add("Europe", new DateTime(2024, 5, 1), 1020);
+        table.Rows.Add("Europe", new DateTime(2024, 6, 1), 970);
+
+        return table;
+    }
+}
