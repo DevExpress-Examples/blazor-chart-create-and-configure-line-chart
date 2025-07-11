@@ -6,7 +6,7 @@
 <DxChart T="object" CustomizeSeriesPoint="CustomizeSeriesPoint">
     @foreach (var region in regionNames)
     {
-        <DxChartLineSeries Data="@(dataTable?.AsEnumerable().Where(r => r["Region"].ToString() == region))"
+        <DxChartLineSeries Data="@(regionSeriesData[region])"
                            ArgumentField='(DataRow row) => (DateTime)row["Month"]'
                            ValueField='(DataRow row) => (int)row["Amount"]'
                            Width="2"
@@ -18,26 +18,38 @@
 
     <DxChartTooltip Enabled="true">
         @context.Point.Render((seriesPoint) =>
-            @<div style="margin: 0.75rem">
-                <div>@seriesPoint.SeriesName</div>
-                <span>@($"{seriesPoint.Argument: MMMM yyyy}: ")</span>
-                <span>@($"{seriesPoint.Value: $0,.0}K")</span>
-            </div>
-        )
+                @<div style="margin: 0.75rem">
+            <div>@seriesPoint.SeriesName</div>
+            <span>@($"{seriesPoint.Argument: MMMM yyyy}: ")</span>
+            <span>@($"{seriesPoint.Value: $0,.0}K")</span>
+        </div>
+                )
     </DxChartTooltip>
+
+    <DxChartZoomAndPanSettings ArgumentAxisZoomAndPanMode="ChartAxisZoomAndPanMode.Both" />
+    <DxChartScrollBarSettings ArgumentAxisScrollBarVisible="true"
+                              ArgumentAxisScrollBarPosition="ChartScrollBarPosition.Bottom" />
 </DxChart>
 
 @code {
     DataTable? dataTable;
     List<string> regionNames = new();
+    Dictionary<string, IEnumerable<DataRow>> regionSeriesData = new();
 
     protected override void OnInitialized()
     {
         dataTable = GetDataTable();
+
         regionNames = dataTable.AsEnumerable()
             .Select(r => r["Region"]?.ToString() ?? string.Empty)
             .Distinct()
             .ToList();
+
+        foreach (var region in regionNames)
+        {
+            regionSeriesData[region] = dataTable.AsEnumerable()
+                .Where(r => r["Region"]?.ToString() == region);
+        }
     }
 
     protected void CustomizeSeriesPoint(ChartSeriesPointCustomizationSettings e)
