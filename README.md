@@ -15,7 +15,7 @@ This example makes use of DxChart's properties and implementation concepts that 
 - Chart Tooltip - Display data on points when hovered on
 - Customize Series Points - Apply distinct colors on series points depending on the corresponding value
 
-![Blazor Chart Boilerplate example](images/blazor-chart-boilerplate.png)
+![Blazor Chart Boilerplate example](images/blazor-chart-boilerplate.jpg)
 
 ## Implementation Details
 
