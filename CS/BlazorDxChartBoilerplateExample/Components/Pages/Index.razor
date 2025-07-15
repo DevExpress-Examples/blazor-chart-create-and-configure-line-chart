@@ -4,24 +4,40 @@
 @rendermode InteractiveServer
 
 <DxChart T="object" CustomizeSeriesPoint="CustomizeSeriesPoint">
+    <DxChartTitle Text="Sales Amount by Region, $" />
+
+    <DxChartLegend Position="RelativePosition.Outside" AllowToggleSeries="true" VerticalAlignment="VerticalEdge.Bottom" />
+
+    <DxChartArgumentAxis>
+        <DxChartAxisLabel Format="ChartElementFormat.Month"></DxChartAxisLabel>
+    </DxChartArgumentAxis>
+
     @foreach (var region in regionNames)
     {
         <DxChartLineSeries Data="@(regionSeriesData[region])"
                            ArgumentField='(DataRow row) => (DateTime)row["Month"]'
                            ValueField='(DataRow row) => (int)row["Amount"]'
                            Width="2"
+                           Color="@(region == "Europe" ? ColorTranslator.FromHtml("#6DFFE7") : ColorTranslator.FromHtml("#1873D3"))"
                            Name="@region">
         </DxChartLineSeries>
     }
 
-    <DxChartLegend Position="RelativePosition.Outside" AllowToggleSeries="true" />
+    @foreach (var annotation in AnnotationSource)
+    {
+        <DxChartAnnotation Argument="@annotation.Argument"
+                           Series="@annotation.Series"
+                           Text="@annotation.Text">
+            <DxChartAnnotationBorder Color="#DDDDDD" Width="2" CornerRadius="4" />
+        </DxChartAnnotation>
+    }
 
     <DxChartTooltip Enabled="true">
         @context.Point.Render((seriesPoint) =>
                 @<div style="margin: 0.75rem">
             <div>@seriesPoint.SeriesName</div>
             <span>@($"{seriesPoint.Argument: MMMM yyyy}: ")</span>
-            <span>@($"{seriesPoint.Value: $0,.0}K")</span>
+            <span>@($"{seriesPoint.Value: $0}")</span>
         </div>
                 )
     </DxChartTooltip>
@@ -35,6 +51,7 @@
     DataTable? dataTable;
     List<string> regionNames = new();
     Dictionary<string, IEnumerable<DataRow>> regionSeriesData = new();
+    List<Annotation> AnnotationSource = new();
 
     protected override void OnInitialized()
     {
@@ -50,18 +67,48 @@
             regionSeriesData[region] = dataTable.AsEnumerable()
                 .Where(r => r["Region"]?.ToString() == region);
         }
+
+        CreateAnnotations();
     }
 
     protected void CustomizeSeriesPoint(ChartSeriesPointCustomizationSettings e)
     {
         int value = (int)((ChartSeriesPoint<object>)e.Point).Value;
-        var color = Color.Green;
+        var color = ColorTranslator.FromHtml("#00A86B");
         if (value < 1200)
-            color = Color.Yellow;
+            color = ColorTranslator.FromHtml("#FFBF00");
         if (value < 1000)
-            color = Color.Red;
+            color = ColorTranslator.FromHtml("#F04923");
         e.PointAppearance.Color = color;
     }
+
+    protected void CreateAnnotations()
+    {
+        if (dataTable == null || dataTable.Rows.Count == 0)
+            return;
+
+        var rows = dataTable.AsEnumerable().ToList();
+
+        var maxRow = rows.OrderByDescending(r => r.Field<int>("Amount")).First();
+        var minRow = rows.OrderBy(r => r.Field<int>("Amount")).First();
+
+        AnnotationSource = new List<Annotation>
+        {
+            new Annotation
+            {
+                Argument = maxRow.Field<DateTime>("Month"),
+                Series = maxRow.Field<string>("Region"),
+                Text = $"Highest recorded sales: {maxRow.Field<int>("Amount")}"
+            },
+            new Annotation
+            {
+                Argument = minRow.Field<DateTime>("Month"),
+                Series = minRow.Field<string>("Region"),
+                Text = $"Lowest recorded sales: {minRow.Field<int>("Amount")}"
+            }
+        };
+    }
+
 
     DataTable GetDataTable()
     {
@@ -70,20 +117,25 @@
         table.Columns.Add("Month", typeof(DateTime));
         table.Columns.Add("Amount", typeof(int));
 
-        table.Rows.Add("North America", new DateTime(2024, 1, 1), 1000);
-        table.Rows.Add("North America", new DateTime(2024, 2, 1), 1200);
-        table.Rows.Add("North America", new DateTime(2024, 3, 1), 900);
-        table.Rows.Add("North America", new DateTime(2024, 4, 1), 1500);
-        table.Rows.Add("North America", new DateTime(2024, 5, 1), 1100);
-        table.Rows.Add("North America", new DateTime(2024, 6, 1), 1300);
+        var regions = new[] { "North America", "Europe" };
+        var random = new Random();
 
-        table.Rows.Add("Europe", new DateTime(2024, 1, 1), 950);
-        table.Rows.Add("Europe", new DateTime(2024, 2, 1), 1050);
-        table.Rows.Add("Europe", new DateTime(2024, 3, 1), 980);
-        table.Rows.Add("Europe", new DateTime(2024, 4, 1), 1150);
-        table.Rows.Add("Europe", new DateTime(2024, 5, 1), 1020);
-        table.Rows.Add("Europe", new DateTime(2024, 6, 1), 970);
+        for (int month = 1; month <= 12; month++)
+        {
+            var date = new DateTime(2024, month, 1);
+            foreach (var region in regions)
+            {
+                table.Rows.Add(region, date, random.Next(800, 1600));
+            }
+        }
 
         return table;
+    }
+
+    public class Annotation
+    {
+        public DateTime Argument { get; set; }
+        public string Series { get; set; }
+        public string Text { get; set; }
     }
 }
