@@ -7,10 +7,12 @@
     <DxChart T="object" CustomizeSeriesPoint="CustomizeSeriesPoint" Width="70%">
         <DxChartTitle Text="Sales Amount by Region, $" />
 
-        <DxChartLegend Position="RelativePosition.Outside" AllowToggleSeries="true" VerticalAlignment="VerticalEdge.Bottom" />
+        <DxChartLegend Position="RelativePosition.Outside"
+                       AllowToggleSeries="true"
+                       VerticalAlignment="VerticalEdge.Bottom" />
 
         <DxChartArgumentAxis>
-            <DxChartAxisLabel Format="ChartElementFormat.ShortDate"></DxChartAxisLabel>
+            <DxChartAxisLabel Format="ChartElementFormat.ShortDate" />
         </DxChartArgumentAxis>
 
         @foreach (var region in regionNames) {
