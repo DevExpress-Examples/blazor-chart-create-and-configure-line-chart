@@ -30,7 +30,7 @@ This example generates series in a loop and binds them to specific regions in th
 
 ### Extend Functionality and Apply Customizations
 
-The DevExpress Blazor Chart component (`DxChart`) allows you to extend chart functionality and configure descriptive elements. This examples applies the following changes:
+The DevExpress Blazor Chart component (`DxChart`) allows you to extend chart functionality and configure descriptive elements. This example applies the following changes:
 
 * Adds a [chart title](https://docs.devexpress.com/Blazor/405093/components/charts/descriptive-elements/descriptive-elements#titles-and-subtitles):
     ```Razor
