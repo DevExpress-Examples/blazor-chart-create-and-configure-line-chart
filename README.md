@@ -1,6 +1,6 @@
 # Blazor Chart - Create and Configure a Line Chart
 
-This example uses the DevExpress Blazor Chart component to create and customize a multi-line chart. A a [DataTable](https://learn.microsoft.com/en-us/dotnet/api/system.data.datatable) object supplies data.
+This example uses the DevExpress Blazor Chart component to create and customize a multi-line chart. A [DataTable](https://learn.microsoft.com/en-us/dotnet/api/system.data.datatable) object supplies data.
 
 ![Blazor Line Chart](images/LineChart.png)
 
