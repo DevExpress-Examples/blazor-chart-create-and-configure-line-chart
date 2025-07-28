@@ -6,7 +6,7 @@
 <!-- default badges end -->
 # Blazor Chart - Create and Configure a Line Chart
 
-This example uses the DevExpress Blazor Chart component to create and customize a multi-line chart. A [DataTable](https://learn.microsoft.com/en-us/dotnet/api/system.data.datatable) object supplies data.
+This example uses the DevExpress Blazor Chart component to create and customize a multi-line chart. A [DataTable](https://learn.microsoft.com/en-us/dotnet/api/system.data.datatable) object supplies chart data.
 
 ![Blazor Line Chart](images/LineChart.png)
 
@@ -14,7 +14,7 @@ This example uses the DevExpress Blazor Chart component to create and customize 
 
 ### Add a Chart and Populate It with Data
 
-Place a [DxChart](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxChart-1) component on the page ([Index.razor](CS/BlazorDxChartBoilerplateExample/Components/Pages/Index.razor)) and add [line series objects](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxChartLineSeries-3) to chart markup. 
+To begin, place a [DxChart](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxChart-1) component on the page ([Index.razor](CS/BlazorDxChartBoilerplateExample/Components/Pages/Index.razor)) and add [line series objects](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxChartLineSeries-3) to chart markup. 
 
 This example generates series in a loop and binds them to specific regions in the [DataTable](/CS/BlazorDxChartBoilerplateExample/Components/Pages/Index.razor#L45-L87) using `Data` properties. `ArgumentField` and `ValueField` properties use lambda expressions to retrieve data from each table row (using the corresponding column name).
 
@@ -36,7 +36,7 @@ This example generates series in a loop and binds them to specific regions in th
 
 ### Extend Functionality and Apply Customizations
 
-The DevExpress Blazor Chart component (`DxChart`) allows you to extend chart functionality and configure descriptive elements. This example applies the following changes:
+The DevExpress Blazor Chart component (`DxChart`) allows you to extend chart capabilities and configure descriptive elements as necessary. This example applies the following changes:
 
 * Adds a [chart title](https://docs.devexpress.com/Blazor/405093/components/charts/descriptive-elements/descriptive-elements#titles-and-subtitles):
     ```Razor
@@ -73,7 +73,7 @@ The DevExpress Blazor Chart component (`DxChart`) allows you to extend chart fun
                               ArgumentAxisScrollBarPosition="ChartScrollBarPosition.Bottom" />
     ```
 
-This example also changes colors of individual series points using the [CustomizeSeriesPoint](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxChartBase.CustomizeSeriesPoint) event:
+This example also changes individual series point colors using the [CustomizeSeriesPoint](https://docs.devexpress.com/Blazor/DevExpress.Blazor.DxChartBase.CustomizeSeriesPoint) event:
 
 ```Razor
 <DxChart T="object"
