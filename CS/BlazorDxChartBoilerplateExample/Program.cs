@@ -6,8 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddDevExpressBlazor(options =>
-{
+builder.Services.AddDevExpressBlazor(options => {
+    options.SizeMode = DevExpress.Blazor.SizeMode.Medium;
 });
 builder.Services.AddMvc();
 
