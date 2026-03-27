@@ -59,11 +59,11 @@ html, body {
     padding-bottom: 0.625rem;
 }
 
-    .title.title-secondary {
-        padding-top: 0.313rem;
-        padding-bottom: 0;
-        color: var(--bs-secondary-color);
-    }
+.title.title-secondary {
+    padding-top: 0.313rem;
+    padding-bottom: 0;
+    color: var(--dxds-color-content-secondary-default-rest);
+}
 
 .title-header-text {
     font-size: 2.5rem;
